@@ -8,7 +8,8 @@
     "preview": "vite preview",
     "build:ts": "node ./build.ts",
     "publish": "cd ./dist && npm publish --access=public",
-    "test": "jest --coverage"
+    "test": "jest --coverage",
+    "commit": "git-cz"
   },
   "dependencies": {
     "axios": "^0.27.2",

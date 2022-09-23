@@ -1,7 +1,7 @@
 {
     "name": "@foxit/v-axios",
     "private": false,
-    "version": "1.0.4",
+    "version": "1.0.5",
     "description": "自定义axios方法",
     "author": "bin_ding",
     "devDependencies": {
@@ -11,7 +11,8 @@
       "vite": "^2.8.0",
       "vite-plugin-vue2": "^1.9.3",
       "vue-template-compiler": "^2.6.11",
-      "vue-tsc": "^0.29.8"
+      "vue-tsc": "^0.29.8",
+      "@types/qs": "^6.9.7"
     },
     "dependencies": {
       "axios": "^0.27.2",
