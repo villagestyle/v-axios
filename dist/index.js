@@ -1,1 +1,1 @@
-export * from './lib/vAxios.es';
+module.exports = require('./lib/vAxios.es');

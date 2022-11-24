@@ -2,11 +2,13 @@ import type {
   Axios,
   AxiosRequestConfig,
   AxiosResponse,
-  AxiosInstance
+  AxiosInstance,
+  CancelTokenSource
 } from "axios";
 
 type AxiosRequestConfigExtends = AxiosRequestConfig & {
   vConfig?: VConfig;
+  cancel?: CancelTokenSource
 }
 
 interface AxiosResponseExtends extends AxiosResponse {

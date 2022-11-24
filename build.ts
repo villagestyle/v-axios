@@ -33,7 +33,7 @@ fs.writeFile(path.resolve(__dirname, 'dist/index.ts'), `export * from './lib/vAx
     }
 })
 
-fs.writeFile(path.resolve(__dirname, 'dist/index.js'), `export * from './lib/vAxios.es';`, (err) => {
+fs.writeFile(path.resolve(__dirname, 'dist/index.js'), `module.exports = require('./lib/vAxios.es');`, (err) => {
     if  (err) {
         console.error('导入JS文件创建失败', err);
     } else {

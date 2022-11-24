@@ -7,6 +7,8 @@ import {
   VConfig
 } from "./index";
 
+const CancelToken = axios.CancelToken;
+
 export class VAxios extends Axios {
   private requestQueue: Map<string, AxiosRequestConfigExtends> = new Map();
   public requestInterceptors: NullAble<
@@ -64,12 +66,9 @@ export class VAxios extends Axios {
   vRequest<T = any, R = AxiosResponse<T, any>>(
     config: AxiosRequestConfigExtends
   ): Promise<R> {
+    const source = CancelToken.source();
     if (this.verifyURL(config.url)) {
       const VConfig = config.vConfig || this.defaultVConfig;
-      this.requestQueue.set(config.url, {
-        ...config,
-        vConfig: VConfig
-      });
       /** formData情况 */
       if (VConfig?.formData) {
         config.data = qs.stringify(config.data);
@@ -77,7 +76,14 @@ export class VAxios extends Axios {
       delete config.vConfig;
       const request = this.instance?.request<T, R>({
         url: config.baseURL ? config.baseURL + config.url : config.url,
+        cancelToken: source.token,
         ...config
+      });
+
+      this.requestQueue.set(config.url, {
+        ...config,
+        vConfig: VConfig,
+        cancel: source
       });
 
       return request ? request : Promise.reject();
@@ -86,39 +92,54 @@ export class VAxios extends Axios {
     }
   }
 
-  vGet<T = any, R = AxiosResponse<T>, D = any>(url: string, config?: AxiosRequestConfigExtends): Promise<R> {
+  vGet<T = any, R = AxiosResponse<T>, D = any>(
+    url: string,
+    config?: AxiosRequestConfigExtends
+  ): Promise<R> {
     return this.vRequest({
       url,
-      method: 'get',
+      method: "get",
       ...config
-    })
+    });
   }
 
-  vPost<T = any, R = AxiosResponse<T>, D = any>(url: string, data?: D, config?: AxiosRequestConfigExtends): Promise<R> {
+  vPost<T = any, R = AxiosResponse<T>, D = any>(
+    url: string,
+    data?: D,
+    config?: AxiosRequestConfigExtends
+  ): Promise<R> {
     return this.vRequest({
       url,
       method: "post",
       data,
       ...config
-    })
+    });
   }
 
-  vPut<T = any, R = AxiosResponse<T>, D = any>(url: string, data?: D, config?: AxiosRequestConfigExtends): Promise<R> {
+  vPut<T = any, R = AxiosResponse<T>, D = any>(
+    url: string,
+    data?: D,
+    config?: AxiosRequestConfigExtends
+  ): Promise<R> {
     return this.vRequest({
       url,
       method: "put",
       data,
       ...config
-    })
+    });
   }
 
-  vDelete<T = any, R = AxiosResponse<T>, D = any>(url: string, data?: D, config?: AxiosRequestConfigExtends): Promise<R> {
+  vDelete<T = any, R = AxiosResponse<T>, D = any>(
+    url: string,
+    data?: D,
+    config?: AxiosRequestConfigExtends
+  ): Promise<R> {
     return this.vRequest({
       url,
       method: "delete",
       data,
       ...config
-    })
+    });
   }
 
   verifyURL(url: unknown): url is string {

@@ -1708,6 +1708,7 @@ var lib = {
   parse,
   stringify: stringify2
 };
+const CancelToken = axios.CancelToken;
 class VAxios extends Axios {
   constructor(config) {
     super();
@@ -1748,18 +1749,21 @@ class VAxios extends Axios {
   }
   vRequest(config) {
     var _a;
+    const source = CancelToken.source();
     if (this.verifyURL(config.url)) {
       const VConfig2 = config.vConfig || this.defaultVConfig;
-      this.requestQueue.set(config.url, __spreadProps(__spreadValues({}, config), {
-        vConfig: VConfig2
-      }));
       if (VConfig2 == null ? void 0 : VConfig2.formData) {
         config.data = lib.stringify(config.data);
       }
       delete config.vConfig;
       const request = (_a = this.instance) == null ? void 0 : _a.request(__spreadValues({
-        url: config.baseURL ? config.baseURL + config.url : config.url
+        url: config.baseURL ? config.baseURL + config.url : config.url,
+        cancelToken: source.token
       }, config));
+      this.requestQueue.set(config.url, __spreadProps(__spreadValues({}, config), {
+        vConfig: VConfig2,
+        cancel: source
+      }));
       return request ? request : Promise.reject();
     } else {
       return Promise.reject();

@@ -1,7 +1,7 @@
 {
     "name": "@foxit/v-axios",
     "private": false,
-    "version": "1.0.5",
+    "version": "1.0.7",
     "description": "自定义axios方法",
     "author": "bin_ding",
     "devDependencies": {
